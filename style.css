@@ -8,3 +8,13 @@
 @media(max-width:600px){.intro-note{display:none}}
 @media(max-width:360px){.intro h1{font-size:26px}.brand{font-size:17px}.brand-mark{transform:scale(.9) rotate(-10deg)}main{padding-left:12px;padding-right:12px}.settings-card{padding:18px}.board-caption{font-size:9px}.turn-status p{font-size:10px}.move-badge{padding:7px 10px}.player{gap:7px;padding:8px}.player-indicator{display:none}footer>span:last-child{display:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* Keep the room name at the header's center, with controls on either side. */
+.site-header{--header-gutter:44px;position:relative;justify-content:center}
+.brand{text-align:center}
+.brand-title{display:block}
+.brand-mark{position:absolute;left:var(--header-gutter);top:50%;transform:translateY(-50%) rotate(-10deg)}
+.site-header>.text-button{position:absolute;right:var(--header-gutter);top:50%;transform:translateY(-50%);padding-left:0}
+@media(max-width:1000px){.site-header{--header-gutter:28px}}
+@media(max-width:760px){.site-header{--header-gutter:20px}}
+@media(max-width:360px){.brand-mark{transform:translateY(-50%) scale(.9) rotate(-10deg)}.brand-en{letter-spacing:1.6px}}
