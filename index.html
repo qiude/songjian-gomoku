@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2e9">
+  <meta name="description" content="松间棋室：免费的木质棋盘五子棋，支持人机和本地双人对弈，离线可玩。">
+  <title>松间棋室 · 五子棋</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./engine.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="松间棋室首页">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>松间棋室<span class="brand-en">SONGJIAN GOMOKU</span></span>
+    </a>
+    <button class="text-button" id="open-rules" type="button"><span aria-hidden="true">ⓘ</span> 玩法说明</button>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">一方棋盘 · 黑白之间</p><h1 id="page-title">静下心，下一局。</h1></div>
+      <p class="intro-note">不赶时间，落子从容。<br><span>15 × 15 传统五子棋</span></p>
+    </section>
+
+    <div class="game-layout">
+      <section class="board-panel" aria-label="五子棋对弈">
+        <div class="board-heading">
+          <div class="turn-status"><span id="turn-stone" class="mini-stone black" aria-hidden="true"></span><div><h2 id="status-title">轮到你落子</h2><p id="status-detail">你执黑棋，点击棋盘开始</p></div></div>
+          <span class="move-badge">第 <strong id="move-count">0</strong> 手</span>
+        </div>
+        <div class="board-frame">
+          <div class="board-surface">
+            <div class="coordinates top-coordinates" aria-hidden="true"></div>
+            <div class="coordinates side-coordinates" aria-hidden="true"></div>
+            <div class="play-area">
+              <svg class="board-lines" viewBox="0 0 150 150" aria-hidden="true" focusable="false"></svg>
+              <div id="board" class="board-grid" role="grid" aria-label="15 行 15 列棋盘，方向键移动，回车或空格落子" aria-rowcount="15" aria-colcount="15"></div>
+            </div>
+          </div>
+        </div>
+        <div class="board-caption"><span><span class="last-move-key" aria-hidden="true"></span> 圆点标记最后一手</span><span>连成五子，即为获胜</span></div>
+        <p id="live-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <aside class="sidebar" aria-label="对局设置">
+        <section class="settings-card">
+          <div class="section-heading"><span class="section-number">01</span><h2>开始一场对弈</h2></div>
+          <div class="mode-switch" role="group" aria-label="对战模式">
+            <button type="button" data-mode="ai" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="6" width="14" height="13" rx="4"/><path d="M12 3v3M9 15h6M2 11h3m14 0h3"/><path d="M9 10h.01M15 10h.01"/></svg>人机对战</button>
+            <button type="button" data-mode="local" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2m1-15a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 4v2"/></svg>本地双人</button>
+          </div>
+          <div id="ai-settings" class="ai-settings">
+            <label class="setting-row" for="human-color"><span>我的棋子</span><select id="human-color"><option value="1">黑棋 · 先手</option><option value="2">白棋 · 后手</option></select></label>
+            <label class="setting-row" for="difficulty"><span>电脑棋力</span><select id="difficulty"><option value="normal">标准</option><option value="hard">进阶</option></select></label>
+          </div>
+          <p id="mode-note" class="setting-note">与电脑切磋，随时开始。</p>
+          <div class="players" aria-label="双方棋手">
+            <div id="black-player" class="player active"><span class="mini-stone black" aria-hidden="true"></span><div><strong id="black-name">你</strong><span>黑棋 · 先行</span></div><i class="player-indicator" aria-hidden="true"></i></div>
+            <div id="white-player" class="player"><span class="mini-stone white" aria-hidden="true"></span><div><strong id="white-name">电脑</strong><span>白棋 · 后行</span></div><i class="player-indicator" aria-hidden="true"></i></div>
+          </div>
+          <button id="restart" class="primary-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg>重新开始</button>
+          <div class="secondary-actions"><button id="undo" class="secondary-button" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5-6 6 6 6M3 11h11a6 6 0 0 1 6 6v3"/></svg>悔棋</button><button id="toggle-numbers" class="secondary-button" type="button" aria-pressed="false"><span class="number-icon" aria-hidden="true">12</span>显示手数</button></div>
+        </section>
+
+        <section class="tip-card"><span class="tip-icon" aria-hidden="true">五</span><div><h2>一步一思，攻守之间</h2><p>横、竖、斜任一方向连成五子即可获胜。试着创造两个威胁，让对手顾此失彼。</p><button id="more-rules" class="inline-button" type="button">了解规则 <span aria-hidden="true">↗</span></button></div></section>
+        <p class="local-note"><span aria-hidden="true">●</span> 无需登录 · 离线可玩 · 对局仅在本页</p>
+      </aside>
+    </div>
+  </main>
+  <footer><span>松间棋室</span><p>一黑一白，自有乐趣。</p><span>纯粹的五子棋</span></footer>
+
+  <dialog id="rules-dialog" aria-labelledby="rules-title">
+    <div class="dialog-heading"><p class="eyebrow">HOW TO PLAY</p><button id="close-rules" class="close-button" type="button" aria-label="关闭规则">×</button></div>
+    <h2 id="rules-title">落子很简单，妙趣在其中。</h2>
+    <ol><li><strong>黑棋先行，轮流落子。</strong>在 15 × 15 棋盘的空交叉点放置棋子，已落棋子不能移动。</li><li><strong>率先连成五子获胜。</strong>横向、竖向、两条斜向均可；超过五子也获胜。本游戏采用自由规则，没有三三、四四或长连禁手。</li><li><strong>棋盘满且无人获胜，为平局。</strong>胜负或平局确定后，本局停止落子。</li><li><strong>悔棋与重开。</strong>双人模式撤回一手；人机模式撤回到你上一次落子前。切换模式、执子或棋力会开始新局；重开立即清空棋盘。</li></ol>
+    <p class="dialog-note">手机轻触交叉点即可落子；键盘用方向键选择位置，回车或空格落子。人机对战支持选择黑白棋。本地双人需在同一设备轮流操作。</p>
+    <p class="dialog-note">对局只存在当前页面内存中，刷新或关闭页面后清空。AI 采用局面评估与有限搜索，适合日常练习，不保证最优解。</p>
+    <button id="rules-done" class="primary-button" type="button">开始对弈</button>
+  </dialog>
+  <noscript><div class="noscript-note">请启用浏览器 JavaScript 后开始游戏。无需联网或安装插件。</div></noscript>
+</body>
+</html>
